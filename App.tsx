@@ -21,7 +21,10 @@ import {
   Moon,
   Eye,
   Edit,
-  Download
+  Download,
+  Menu,
+  X,
+  Home
 } from 'lucide-react';
 
 const INITIAL_REPORT: InspectionReport = {
@@ -440,14 +443,21 @@ const App: React.FC = () => {
         )}
       </div>
 
-      <div className="p-4 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center z-10 safe-area-bottom">
-        <button onClick={() => setCurrentStep(AppStep.DASHBOARD)} className="text-slate-500 dark:text-slate-400 font-bold px-6 py-4 text-lg">Abbruch</button>
-        <button 
-          onClick={() => setCurrentStep(AppStep.DAMAGE_LOG)} 
-          disabled={!report.document}
-          className="bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white px-10 py-5 rounded-xl font-bold text-xl flex items-center gap-2 shadow-lg transition-all"
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center z-50 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+        <button
+          type="button"
+          onClick={() => setCurrentStep(AppStep.DASHBOARD)}
+          className="text-slate-500 dark:text-slate-400 font-bold px-8 py-5 text-xl"
         >
-          Weiter <ChevronRight className="w-8 h-8" />
+          Abbruch
+        </button>
+        <button
+          type="button"
+          onClick={() => setCurrentStep(AppStep.DAMAGE_LOG)}
+          disabled={!report.document}
+          className="bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white px-12 py-6 rounded-2xl font-bold text-2xl flex items-center gap-3 shadow-xl transition-all"
+        >
+          Weiter <ChevronRight className="w-10 h-10" />
         </button>
       </div>
     </div>
@@ -567,15 +577,20 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-4 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center z-10 safe-area-bottom">
-        <button onClick={() => setCurrentStep(AppStep.SCAN_DOCUMENT)} className="flex items-center text-slate-600 dark:text-slate-400 font-bold px-6 py-4 text-lg">
-          <ChevronLeft className="w-7 h-7 mr-1" /> Zurück
-        </button>
-        <button 
-          onClick={() => setCurrentStep(AppStep.DRIVER_SIGNATURE)} 
-          className="bg-brand-600 text-white px-10 py-5 rounded-xl font-bold text-xl flex items-center gap-2 shadow-lg"
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center z-50 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+        <button
+          type="button"
+          onClick={() => setCurrentStep(AppStep.SCAN_DOCUMENT)}
+          className="flex items-center text-slate-600 dark:text-slate-400 font-bold px-6 py-5 text-xl"
         >
-          Weiter <ChevronRight className="w-8 h-8" />
+          <ChevronLeft className="w-9 h-9 mr-2" /> Zurück
+        </button>
+        <button
+          type="button"
+          onClick={() => setCurrentStep(AppStep.DRIVER_SIGNATURE)}
+          className="bg-brand-600 text-white px-12 py-6 rounded-2xl font-bold text-2xl flex items-center gap-3 shadow-xl"
+        >
+          Weiter <ChevronRight className="w-10 h-10" />
         </button>
       </div>
     </div>
@@ -686,16 +701,21 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-4 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center z-10 safe-area-bottom">
-        <button onClick={() => setCurrentStep(AppStep.DAMAGE_LOG)} className="flex items-center text-slate-600 dark:text-slate-400 font-bold px-6 py-4 text-lg">
-          <ChevronLeft className="w-7 h-7 mr-1" /> Zurück
-        </button>
-        <button 
-          onClick={() => setCurrentStep(AppStep.SUMMARY)} 
-          disabled={!report.driver?.signatureDataUrl || !report.driver?.name || !report.employeeName}
-          className="bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white px-10 py-5 rounded-xl font-bold text-xl flex items-center gap-2 shadow-lg"
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center z-50 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+        <button
+          type="button"
+          onClick={() => setCurrentStep(AppStep.DAMAGE_LOG)}
+          className="flex items-center text-slate-600 dark:text-slate-400 font-bold px-6 py-5 text-xl"
         >
-          Fertig <CheckCircle2 className="w-6 h-6" />
+          <ChevronLeft className="w-9 h-9 mr-2" /> Zurück
+        </button>
+        <button
+          type="button"
+          onClick={() => setCurrentStep(AppStep.SUMMARY)}
+          disabled={!report.driver?.signatureDataUrl || !report.driver?.name || !report.employeeName}
+          className="bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white px-12 py-6 rounded-2xl font-bold text-2xl flex items-center gap-3 shadow-xl"
+        >
+          Fertig <CheckCircle2 className="w-8 h-8" />
         </button>
       </div>
     </div>
@@ -823,21 +843,21 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-4 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex flex-col gap-3 z-10 safe-area-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-        <div className="flex gap-3">
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex flex-col gap-4 z-50 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+        <div className="flex gap-4">
           <button
             type="button"
             onClick={() => setCurrentStep(AppStep.DRIVER_SIGNATURE)}
-            className="flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-5 px-4 rounded-xl transition-colors text-lg"
+            className="flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-6 px-6 rounded-2xl transition-colors text-xl"
           >
             Bearbeiten
           </button>
           <button
             type="button"
             onClick={submitReport}
-            className="flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-5 px-4 rounded-xl flex justify-center items-center gap-2 shadow-lg transition-colors text-lg"
+            className="flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-6 px-6 rounded-2xl flex justify-center items-center gap-3 shadow-xl transition-colors text-xl"
           >
-            <Save className="w-6 h-6" />
+            <Save className="w-8 h-8" />
             Speichern
           </button>
         </div>
@@ -851,9 +871,9 @@ const App: React.FC = () => {
               alert('Fehler beim PDF-Export: ' + (error instanceof Error ? error.message : 'Unbekannter Fehler'));
             }
           }}
-          className="w-full bg-green-600 active:bg-green-700 text-white font-bold py-5 px-4 rounded-xl flex justify-center items-center gap-2 shadow-lg transition-colors text-lg"
+          className="w-full bg-green-600 active:bg-green-700 text-white font-bold py-6 px-6 rounded-2xl flex justify-center items-center gap-3 shadow-xl transition-colors text-xl"
         >
-          <Download className="w-6 h-6" />
+          <Download className="w-8 h-8" />
           Als PDF herunterladen
         </button>
       </div>
@@ -1009,23 +1029,23 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-4 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex flex-col gap-3 z-10 safe-area-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-        <div className="flex gap-3">
+      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex flex-col gap-4 z-50 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+        <div className="flex gap-4">
           <button
             type="button"
             onClick={() => setCurrentStep(AppStep.DASHBOARD)}
-            className="flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-5 px-4 text-lg rounded-xl transition-colors flex items-center justify-center gap-2"
+            className="flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-6 px-6 text-xl rounded-2xl transition-colors flex items-center justify-center gap-3"
           >
-            <ChevronLeft className="w-7 h-7" />
+            <ChevronLeft className="w-9 h-9" />
             Zurück
           </button>
           {report.status === 'draft' && (
             <button
               type="button"
               onClick={() => editReport(report.id)}
-              className="flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-5 px-4 text-lg rounded-xl flex justify-center items-center gap-2 shadow-lg transition-colors"
+              className="flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-6 px-6 text-xl rounded-2xl flex justify-center items-center gap-3 shadow-xl transition-colors"
             >
-              <Edit className="w-6 h-6" />
+              <Edit className="w-8 h-8" />
               Weiter bearbeiten
             </button>
           )}
@@ -1040,9 +1060,9 @@ const App: React.FC = () => {
               alert('Fehler beim PDF-Export: ' + (error instanceof Error ? error.message : 'Unbekannter Fehler'));
             }
           }}
-          className="w-full bg-green-600 active:bg-green-700 text-white font-bold py-5 px-4 rounded-xl flex justify-center items-center gap-2 shadow-lg transition-colors text-lg"
+          className="w-full bg-green-600 active:bg-green-700 text-white font-bold py-6 px-6 rounded-2xl flex justify-center items-center gap-3 shadow-xl transition-colors text-xl"
         >
-          <Download className="w-6 h-6" />
+          <Download className="w-8 h-8" />
           Als PDF herunterladen
         </button>
       </div>
