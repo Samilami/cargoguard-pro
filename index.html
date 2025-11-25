@@ -39,6 +39,17 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
+      /* Safe area padding for mobile devices (notch, home indicator) */
+      .safe-area-bottom {
+        padding-bottom: env(safe-area-inset-bottom);
+      }
+      .safe-area-top {
+        padding-top: env(safe-area-inset-top);
+      }
+      /* Ensure content doesn't get hidden behind mobile keyboard */
+      .mobile-content {
+        min-height: -webkit-fill-available;
+      }
     </style>
   <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"></script>
   <script type="importmap-shim">

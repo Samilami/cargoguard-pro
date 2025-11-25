@@ -19,7 +19,7 @@ export interface DocumentData {
 
 export interface DamageRecord {
   id: string;
-  imageUrl: string;
+  imageUrls: string[]; // Multiple images per damage
   description: string;
   severity: 'Gering' | 'Mittel' | 'Schwer';
   categories: string[]; // Changed to array for multiple selections
