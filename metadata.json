@@ -1,0 +1,7 @@
+{
+  "name": "CargoGuard Pro",
+  "description": "Professionelle Transportschaden-Dokumentation mit Lieferschein-Scan und digitaler Unterschrift.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
