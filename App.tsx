@@ -3,6 +3,7 @@ import { AppStep, DamageRecord, DriverData, InspectionReport } from './types';
 import CameraInput from './components/CameraInput';
 import SignaturePad from './components/SignaturePad';
 import { useDatabase } from './hooks/useDatabase';
+import { generateReportPDF } from './services/pdfService';
 import {
   Truck,
   FileText,
@@ -19,7 +20,8 @@ import {
   Sun,
   Moon,
   Eye,
-  Edit
+  Edit,
+  Download
 } from 'lucide-react';
 
 const INITIAL_REPORT: InspectionReport = {
@@ -821,16 +823,38 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-4 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex gap-3 z-10 safe-area-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-        <button onClick={() => setCurrentStep(AppStep.DRIVER_SIGNATURE)} className="flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-4 rounded-xl transition-colors">
-          Bearbeiten
-        </button>
-        <button 
-          onClick={submitReport}
-          className="flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-4 rounded-xl flex justify-center items-center gap-2 shadow-lg transition-colors"
+      <div className="p-4 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex flex-col gap-3 z-10 safe-area-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <div className="flex gap-3">
+          <button
+            type="button"
+            onClick={() => setCurrentStep(AppStep.DRIVER_SIGNATURE)}
+            className="flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-5 px-4 rounded-xl transition-colors text-lg"
+          >
+            Bearbeiten
+          </button>
+          <button
+            type="button"
+            onClick={submitReport}
+            className="flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-5 px-4 rounded-xl flex justify-center items-center gap-2 shadow-lg transition-colors text-lg"
+          >
+            <Save className="w-6 h-6" />
+            Speichern
+          </button>
+        </div>
+        <button
+          type="button"
+          onClick={async () => {
+            try {
+              await generateReportPDF(report);
+              alert('PDF erfolgreich erstellt!');
+            } catch (error) {
+              alert('Fehler beim PDF-Export: ' + (error instanceof Error ? error.message : 'Unbekannter Fehler'));
+            }
+          }}
+          className="w-full bg-green-600 active:bg-green-700 text-white font-bold py-5 px-4 rounded-xl flex justify-center items-center gap-2 shadow-lg transition-colors text-lg"
         >
-          <Save className="w-5 h-5" />
-          Speichern
+          <Download className="w-6 h-6" />
+          Als PDF herunterladen
         </button>
       </div>
     </div>
@@ -985,23 +1009,42 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="p-4 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex gap-3 z-10 safe-area-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
-        <button
-          onClick={() => setCurrentStep(AppStep.DASHBOARD)}
-          className="flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-4 px-6 text-lg rounded-xl transition-colors flex items-center justify-center gap-2"
-        >
-          <ChevronLeft className="w-7 h-7" />
-          Zurück
-        </button>
-        {report.status === 'draft' && (
+      <div className="p-4 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex flex-col gap-3 z-10 safe-area-bottom shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <div className="flex gap-3">
           <button
-            onClick={() => editReport(report.id)}
-            className="flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-4 px-6 text-lg rounded-xl flex justify-center items-center gap-2 shadow-lg transition-colors"
+            type="button"
+            onClick={() => setCurrentStep(AppStep.DASHBOARD)}
+            className="flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-5 px-4 text-lg rounded-xl transition-colors flex items-center justify-center gap-2"
           >
-            <Edit className="w-5 h-5" />
-            Weiter bearbeiten
+            <ChevronLeft className="w-7 h-7" />
+            Zurück
           </button>
-        )}
+          {report.status === 'draft' && (
+            <button
+              type="button"
+              onClick={() => editReport(report.id)}
+              className="flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-5 px-4 text-lg rounded-xl flex justify-center items-center gap-2 shadow-lg transition-colors"
+            >
+              <Edit className="w-6 h-6" />
+              Weiter bearbeiten
+            </button>
+          )}
+        </div>
+        <button
+          type="button"
+          onClick={async () => {
+            try {
+              await generateReportPDF(report);
+              alert('PDF erfolgreich erstellt!');
+            } catch (error) {
+              alert('Fehler beim PDF-Export: ' + (error instanceof Error ? error.message : 'Unbekannter Fehler'));
+            }
+          }}
+          className="w-full bg-green-600 active:bg-green-700 text-white font-bold py-5 px-4 rounded-xl flex justify-center items-center gap-2 shadow-lg transition-colors text-lg"
+        >
+          <Download className="w-6 h-6" />
+          Als PDF herunterladen
+        </button>
       </div>
     </div>
   );
