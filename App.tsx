@@ -207,7 +207,7 @@ const App: React.FC = () => {
           {/* Header */}
           <div className="p-6 bg-brand-600 dark:bg-brand-700 text-white safe-area-top">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-xl font-bold">CargoGuard Pro</h2>
+              <h2 className="text-xl font-bold">Transportschaden</h2>
               <button
                 type="button"
                 onClick={() => setIsMenuOpen(false)}
@@ -394,8 +394,8 @@ const App: React.FC = () => {
             className="w-32 h-32 object-contain mx-auto"
           />
         </div>
-        <h1 className="text-responsive-xl font-extrabold text-slate-800 dark:text-white tracking-tight">CargoGuard Pro</h1>
-        <p className="text-slate-500 dark:text-slate-400 text-responsive">Professionelle Dokumentation</p>
+        <h1 className="text-responsive-xl font-extrabold text-slate-800 dark:text-white tracking-tight">Transportschaden / Dokumentation</h1>
+        <p className="text-slate-500 dark:text-slate-400 text-responsive">Professionelle Schadenserfassung</p>
       </div>
 
       {/* Scrollbarer Content */}

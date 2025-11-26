@@ -302,7 +302,7 @@ export async function generateReportPDF(report: InspectionReport): Promise<void>
     doc.setFontSize(8);
     doc.setTextColor(148, 163, 184);
     doc.setFont('helvetica', 'italic');
-    const footerText = 'Generiert mit AvoCarbon CargoGuard Pro';
+    const footerText = 'Generiert mit AvoCarbon Transportschaden Dokumentation';
     const footerWidth = doc.getTextWidth(footerText);
     doc.text(footerText, (pageWidth - footerWidth) / 2, pageHeight - 10);
 
