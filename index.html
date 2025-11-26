@@ -27,11 +27,45 @@
       }
     </script>
     <style>
-      /* Prevent pull-to-refresh on mobile for app-like feel */
+      /* Reset and base mobile optimizations */
+      * {
+        -webkit-tap-highlight-color: transparent;
+      }
+
+      html, body {
+        height: 100%;
+        width: 100%;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        position: fixed;
+        overscroll-behavior: none;
+        -webkit-overflow-scrolling: touch;
+      }
+
       body {
         overscroll-behavior-y: none;
+        touch-action: pan-y;
       }
-      /* Hide scrollbar for cleaner mobile look but allow scrolling */
+
+      /* Safe area insets for modern mobile devices */
+      .safe-area-top {
+        padding-top: max(env(safe-area-inset-top), 12px);
+      }
+
+      .safe-area-bottom {
+        padding-bottom: max(env(safe-area-inset-bottom), 12px);
+      }
+
+      .safe-area-left {
+        padding-left: max(env(safe-area-inset-left), 16px);
+      }
+
+      .safe-area-right {
+        padding-right: max(env(safe-area-inset-right), 16px);
+      }
+
+      /* Hide scrollbar but allow scrolling */
       .no-scrollbar::-webkit-scrollbar {
         display: none;
       }
@@ -39,16 +73,56 @@
         -ms-overflow-style: none;
         scrollbar-width: none;
       }
-      /* Safe area padding for mobile devices (notch, home indicator) */
-      .safe-area-bottom {
-        padding-bottom: env(safe-area-inset-bottom);
+
+      /* Fixed layout structure */
+      .app-container {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        height: 100dvh; /* Dynamic viewport height for mobile */
+        width: 100%;
+        overflow: hidden;
       }
-      .safe-area-top {
-        padding-top: env(safe-area-inset-top);
+
+      .app-header {
+        flex-shrink: 0;
+        position: relative;
+        z-index: 40;
       }
-      /* Ensure content doesn't get hidden behind mobile keyboard */
-      .mobile-content {
-        min-height: -webkit-fill-available;
+
+      .app-content {
+        flex: 1;
+        overflow-y: auto;
+        overflow-x: hidden;
+        -webkit-overflow-scrolling: touch;
+        position: relative;
+      }
+
+      .app-footer {
+        flex-shrink: 0;
+        position: relative;
+        z-index: 50;
+        box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+      }
+
+      /* Touch-optimized buttons */
+      .touch-button {
+        min-height: 48px;
+        min-width: 48px;
+        touch-action: manipulation;
+      }
+
+      /* Responsive text sizing */
+      .text-responsive {
+        font-size: clamp(1rem, 2.5vw, 1.25rem);
+      }
+
+      .text-responsive-lg {
+        font-size: clamp(1.25rem, 3vw, 1.5rem);
+      }
+
+      .text-responsive-xl {
+        font-size: clamp(1.5rem, 4vw, 2rem);
       }
     </style>
   <script async src="https://ga.jspm.io/npm:es-module-shims@1.8.0/dist/es-module-shims.js"></script>

@@ -234,61 +234,61 @@ const App: React.FC = () => {
   // --- Step Rendering ---
 
   const renderDashboard = () => (
-    <div className="relative flex flex-col h-full bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-
-      {/* Theme Toggle Button - Positioned absolutely for dashboard centering aesthetics */}
-      <div className="absolute top-6 right-6 z-10">
-        <ThemeToggle />
-      </div>
-
-      <div className="flex-none text-center p-8 space-y-6">
+    <div className="app-container bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+      {/* Header mit Logo und Theme Toggle */}
+      <div className="app-header text-center p-6 safe-area-top">
+        <div className="absolute top-6 right-6 z-10">
+          <ThemeToggle />
+        </div>
         <div className="inline-block mb-4">
           <img
             src="/avocarbon_logo.png"
             alt="AvoCarbon Logo"
-            className="w-40 h-40 object-contain mx-auto"
+            className="w-32 h-32 object-contain mx-auto"
           />
         </div>
-        <h1 className="text-5xl font-extrabold text-slate-800 dark:text-white tracking-tight">CargoGuard Pro</h1>
-        <p className="text-slate-500 dark:text-slate-400 text-2xl">Professionelle Dokumentation</p>
+        <h1 className="text-responsive-xl font-extrabold text-slate-800 dark:text-white tracking-tight">CargoGuard Pro</h1>
+        <p className="text-slate-500 dark:text-slate-400 text-responsive">Professionelle Dokumentation</p>
       </div>
 
-      <div className="flex-none px-8 pb-6">
-        <button
-          type="button"
-          onClick={startNewReport}
-          className="w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-6 px-10 rounded-2xl shadow-xl flex items-center justify-center gap-4 transition-transform active:scale-95 text-2xl"
-        >
-          <Plus className="w-10 h-10" />
-          <span>Neuen Bericht starten</span>
-        </button>
-      </div>
+      {/* Scrollbarer Content */}
+      <div className="app-content px-6 no-scrollbar">
+        {/* Neuen Bericht Button */}
+        <div className="mb-6">
+          <button
+            type="button"
+            onClick={startNewReport}
+            className="touch-button w-full bg-brand-600 hover:bg-brand-700 text-white font-bold py-5 px-8 rounded-2xl shadow-xl flex items-center justify-center gap-3 transition-transform active:scale-95 text-responsive-lg"
+          >
+            <Plus className="w-8 h-8" />
+            <span>Neuen Bericht starten</span>
+          </button>
+        </div>
 
-      {/* Berichte Liste */}
-      <div className="flex-1 overflow-y-auto px-8 pb-24 no-scrollbar">
+        {/* Berichte Liste */}
         {reports.length > 0 ? (
           <div className="space-y-4 pb-6">
-            <h2 className="text-2xl font-bold text-slate-700 dark:text-slate-300 mb-4 sticky top-0 bg-slate-50 dark:bg-slate-950 py-2 z-10">
+            <h2 className="text-responsive-lg font-bold text-slate-700 dark:text-slate-300 mb-4 sticky top-0 bg-slate-50 dark:bg-slate-950 py-2 z-10">
               Gespeicherte Berichte ({reports.length})
             </h2>
             {reports.map((r) => (
               <div
                 key={r.id}
-                className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
+                className="bg-white dark:bg-slate-900 p-5 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm"
               >
                 <div className="flex justify-between items-start mb-3">
                   <div className="flex-1">
-                    <div className="font-bold text-xl text-slate-800 dark:text-white">{r.id}</div>
-                    <div className="text-base text-slate-500 dark:text-slate-400 mt-1">
+                    <div className="font-bold text-responsive text-slate-800 dark:text-white">{r.id}</div>
+                    <div className="text-sm text-slate-500 dark:text-slate-400 mt-1">
                       {new Date(r.createdAt).toLocaleString('de-DE')}
                     </div>
-                    <div className="text-base text-slate-600 dark:text-slate-300 mt-2">
+                    <div className="text-sm text-slate-600 dark:text-slate-300 mt-2">
                       Mitarbeiter: {r.employeeName || 'Unbekannt'}
                     </div>
                   </div>
                   <div className="flex gap-2">
                     <span
-                      className={`px-4 py-2 rounded-full text-base font-bold ${
+                      className={`px-3 py-1.5 rounded-full text-xs font-bold ${
                         r.status === 'submitted'
                           ? 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400'
                           : 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-400'
@@ -299,14 +299,14 @@ const App: React.FC = () => {
                   </div>
                 </div>
                 <div className="flex justify-between items-center mt-4 pt-4 border-t dark:border-slate-800">
-                  <div className="text-base text-slate-500 dark:text-slate-400 font-medium">
+                  <div className="text-sm text-slate-500 dark:text-slate-400 font-medium">
                     Schäden: {r.damages.length}
                   </div>
                   <div className="flex gap-2">
                     <button
                       type="button"
                       onClick={() => viewReport(r.id)}
-                      className="text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20 p-3 rounded-lg transition-colors flex items-center gap-2"
+                      className="touch-button text-brand-600 dark:text-brand-400 hover:bg-brand-50 dark:hover:bg-brand-900/20 p-3 rounded-lg transition-colors flex items-center gap-2"
                       title="Bericht öffnen"
                       aria-label="Bericht öffnen"
                     >
@@ -316,7 +316,7 @@ const App: React.FC = () => {
                       <button
                         type="button"
                         onClick={() => editReport(r.id)}
-                        className="text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 p-3 rounded-lg transition-colors flex items-center gap-2"
+                        className="touch-button text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 p-3 rounded-lg transition-colors flex items-center gap-2"
                         title="Weiter bearbeiten"
                         aria-label="Weiter bearbeiten"
                       >
@@ -330,7 +330,7 @@ const App: React.FC = () => {
                           await deleteReport(r.id);
                         }
                       }}
-                      className="text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 p-3 rounded-lg transition-colors"
+                      className="touch-button text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 p-3 rounded-lg transition-colors"
                       title="Bericht löschen"
                       aria-label="Bericht löschen"
                     >
@@ -342,32 +342,35 @@ const App: React.FC = () => {
             ))}
           </div>
         ) : (
-          <div className="text-center text-slate-400 dark:text-slate-500 py-12 text-xl">
+          <div className="text-center text-slate-400 dark:text-slate-500 py-12 text-responsive">
             Noch keine Berichte vorhanden
           </div>
         )}
-      </div>
 
-      <div className="flex-none text-sm text-slate-400 dark:text-slate-500 text-center p-6 leading-relaxed">
-        Durch die Nutzung bestätigen Sie die Einhaltung der Vorschriften gemäß HGB/CMR.
+        {/* Footer Text */}
+        <div className="text-xs text-slate-400 dark:text-slate-500 text-center py-6 leading-relaxed">
+          Durch die Nutzung bestätigen Sie die Einhaltung der Vorschriften gemäß HGB/CMR.
+        </div>
       </div>
     </div>
   );
 
   const renderScanDocument = () => (
-    <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-      <div className="flex-none p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 z-10 flex justify-between items-center">
-        <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800 dark:text-white">
+    <div className="app-container bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+      {/* Header */}
+      <div className="app-header p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 flex justify-between items-center safe-area-top">
+        <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
           <FileText className="text-brand-600 dark:text-brand-400" /> 1. Lieferschein
         </h2>
         <ThemeToggle />
       </div>
 
-      <div className="flex-1 p-4 overflow-y-auto no-scrollbar">
+      {/* Content */}
+      <div className="app-content p-4 no-scrollbar">
         {!report.document?.imageUrl ? (
           <div className="flex flex-col h-full justify-center space-y-6">
             <div className="text-center space-y-2">
-               <p className="text-slate-600 dark:text-slate-300 text-xl font-medium">Lieferschein fotografieren</p>
+               <p className="text-slate-600 dark:text-slate-300 text-responsive-lg font-medium">Lieferschein fotografieren</p>
                <p className="text-slate-400 dark:text-slate-500 text-sm">Bitte gesamtes Dokument erfassen</p>
             </div>
             <CameraInput onCapture={handleDocumentCapture} label="Foto aufnehmen" className="h-64" />
@@ -377,39 +380,39 @@ const App: React.FC = () => {
              {/* Bildvorschau */}
              <div className="relative h-56 w-full bg-slate-800 rounded-xl overflow-hidden shadow-md">
                 <img src={report.document.imageUrl} alt="Scan" className="w-full h-full object-contain" />
-                <button 
+                <button
                   onClick={() => setReport(prev => ({...prev, document: null}))}
-                  className="absolute bottom-3 right-3 bg-red-600 active:bg-red-700 text-white p-3 rounded-full shadow-lg"
+                  className="touch-button absolute bottom-3 right-3 bg-red-600 active:bg-red-700 text-white p-3 rounded-full shadow-lg"
                   title="Lieferschein löschen"
                   aria-label="Lieferschein löschen"
                 >
                   <Trash2 className="w-6 h-6" />
                 </button>
              </div>
-             
+
              {/* Eingabefelder */}
              <div className="bg-white dark:bg-slate-900 p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
-               <h3 className="font-bold text-slate-800 dark:text-white text-lg border-b dark:border-slate-800 pb-2 mb-2">Daten eingeben</h3>
-               
+               <h3 className="font-bold text-slate-800 dark:text-white text-responsive border-b dark:border-slate-800 pb-2 mb-2">Daten eingeben</h3>
+
                <div className="space-y-4">
                  <div>
-                   <label className="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider ml-1">Lieferschein Nr. *</label>
-                   <input 
-                     type="text" 
+                   <label className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider ml-1">Lieferschein Nr. *</label>
+                   <input
+                     type="text"
                      placeholder="Nummer eingeben"
-                     value={report.document.deliveryNumber} 
+                     value={report.document.deliveryNumber}
                      onChange={(e) => setReport(prev => ({...prev, document: {...prev.document!, deliveryNumber: e.target.value}}))}
-                     className="w-full p-5 text-xl border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
+                     className="touch-button w-full p-4 text-responsive border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-brand-500 focus:border-brand-500 outline-none transition-all"
                    />
                  </div>
-                 
+
                  <div>
-                   <label className="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider ml-1">Datum</label>
-                   <input 
-                     type="date" 
-                     value={report.document.date} 
+                   <label className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider ml-1">Datum</label>
+                   <input
+                     type="date"
+                     value={report.document.date}
                      onChange={(e) => setReport(prev => ({...prev, document: {...prev.document!, date: e.target.value}}))}
-                     className="w-full p-5 text-xl border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-brand-500 outline-none"
+                     className="touch-button w-full p-4 text-responsive border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-brand-500 outline-none"
                      title="Lieferdatum auswählen"
                      placeholder="Datum auswählen"
                    />
@@ -417,23 +420,23 @@ const App: React.FC = () => {
 
                  <div className="grid grid-cols-1 gap-4">
                     <div>
-                      <label className="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider ml-1">Absender</label>
-                      <input 
-                        type="text" 
+                      <label className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider ml-1">Absender</label>
+                      <input
+                        type="text"
                         placeholder="Firma / Ort"
-                        value={report.document.sender} 
+                        value={report.document.sender}
                         onChange={(e) => setReport(prev => ({...prev, document: {...prev.document!, sender: e.target.value}}))}
-                        className="w-full p-5 text-xl border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-brand-500 outline-none"
+                        className="touch-button w-full p-4 text-responsive border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-brand-500 outline-none"
                       />
                     </div>
                     <div>
-                      <label className="text-sm text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider ml-1">Empfänger</label>
-                      <input 
-                        type="text" 
+                      <label className="text-xs text-slate-500 dark:text-slate-400 uppercase font-bold tracking-wider ml-1">Empfänger</label>
+                      <input
+                        type="text"
                         placeholder="Firma / Ort"
-                        value={report.document.recipient} 
+                        value={report.document.recipient}
                         onChange={(e) => setReport(prev => ({...prev, document: {...prev.document!, recipient: e.target.value}}))}
-                        className="w-full p-5 text-xl border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-brand-500 outline-none"
+                        className="touch-button w-full p-4 text-responsive border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800 dark:text-white focus:bg-white dark:focus:bg-slate-700 focus:ring-2 focus:ring-brand-500 outline-none"
                       />
                     </div>
                  </div>
@@ -443,11 +446,12 @@ const App: React.FC = () => {
         )}
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center z-50 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+      {/* Footer Buttons */}
+      <div className="app-footer p-5 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center safe-area-bottom">
         <button
           type="button"
           onClick={() => setCurrentStep(AppStep.DASHBOARD)}
-          className="text-slate-500 dark:text-slate-400 font-bold px-8 py-5 text-xl"
+          className="touch-button text-slate-500 dark:text-slate-400 font-bold px-6 py-4 text-responsive"
         >
           Abbruch
         </button>
@@ -455,24 +459,26 @@ const App: React.FC = () => {
           type="button"
           onClick={() => setCurrentStep(AppStep.DAMAGE_LOG)}
           disabled={!report.document}
-          className="bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white px-12 py-6 rounded-2xl font-bold text-2xl flex items-center gap-3 shadow-xl transition-all"
+          className="touch-button bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white px-10 py-5 rounded-2xl font-bold text-responsive-lg flex items-center gap-3 shadow-xl transition-all"
         >
-          Weiter <ChevronRight className="w-10 h-10" />
+          Weiter <ChevronRight className="w-8 h-8" />
         </button>
       </div>
     </div>
   );
 
   const renderDamageLog = () => (
-    <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-      <div className="flex-none p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 z-10 flex justify-between items-center">
-        <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800 dark:text-white">
+    <div className="app-container bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+      {/* Header */}
+      <div className="app-header p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 flex justify-between items-center safe-area-top">
+        <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
           <AlertTriangle className="text-orange-500" /> 2. Schäden
         </h2>
         <ThemeToggle />
       </div>
 
-      <div className="flex-1 p-4 overflow-y-auto no-scrollbar pb-24">
+      {/* Content */}
+      <div className="app-content p-4 no-scrollbar">
         {/* Foto Button */}
         <div className="mb-6">
           <CameraInput
@@ -577,35 +583,38 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center z-50 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+      {/* Footer Buttons */}
+      <div className="app-footer p-5 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center safe-area-bottom">
         <button
           type="button"
           onClick={() => setCurrentStep(AppStep.SCAN_DOCUMENT)}
-          className="flex items-center text-slate-600 dark:text-slate-400 font-bold px-6 py-5 text-xl"
+          className="touch-button flex items-center text-slate-600 dark:text-slate-400 font-bold px-5 py-4 text-responsive"
         >
-          <ChevronLeft className="w-9 h-9 mr-2" /> Zurück
+          <ChevronLeft className="w-7 h-7 mr-2" /> Zurück
         </button>
         <button
           type="button"
           onClick={() => setCurrentStep(AppStep.DRIVER_SIGNATURE)}
-          className="bg-brand-600 text-white px-12 py-6 rounded-2xl font-bold text-2xl flex items-center gap-3 shadow-xl"
+          className="touch-button bg-brand-600 text-white px-10 py-5 rounded-2xl font-bold text-responsive-lg flex items-center gap-3 shadow-xl"
         >
-          Weiter <ChevronRight className="w-10 h-10" />
+          Weiter <ChevronRight className="w-8 h-8" />
         </button>
       </div>
     </div>
   );
 
   const renderSignature = () => (
-    <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-      <div className="flex-none p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 z-10 flex justify-between items-center">
-        <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800 dark:text-white">
+    <div className="app-container bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+      {/* Header */}
+      <div className="app-header p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 flex justify-between items-center safe-area-top">
+        <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
           <PenTool className="text-brand-600 dark:text-brand-400" /> 3. Abschluss
         </h2>
         <ThemeToggle />
       </div>
 
-      <div className="flex-1 p-4 overflow-y-auto no-scrollbar">
+      {/* Content */}
+      <div className="app-content p-4 no-scrollbar">
         
         {/* Vorbehalt Section */}
         <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-900/50 p-5 rounded-xl shadow-sm mb-6">
@@ -701,36 +710,39 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center z-50 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+      {/* Footer Buttons */}
+      <div className="app-footer p-5 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex justify-between items-center safe-area-bottom">
         <button
           type="button"
           onClick={() => setCurrentStep(AppStep.DAMAGE_LOG)}
-          className="flex items-center text-slate-600 dark:text-slate-400 font-bold px-6 py-5 text-xl"
+          className="touch-button flex items-center text-slate-600 dark:text-slate-400 font-bold px-5 py-4 text-responsive"
         >
-          <ChevronLeft className="w-9 h-9 mr-2" /> Zurück
+          <ChevronLeft className="w-7 h-7 mr-2" /> Zurück
         </button>
         <button
           type="button"
           onClick={() => setCurrentStep(AppStep.SUMMARY)}
           disabled={!report.driver?.signatureDataUrl || !report.driver?.name || !report.employeeName}
-          className="bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white px-12 py-6 rounded-2xl font-bold text-2xl flex items-center gap-3 shadow-xl"
+          className="touch-button bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 text-white px-10 py-5 rounded-2xl font-bold text-responsive-lg flex items-center gap-3 shadow-xl"
         >
-          Fertig <CheckCircle2 className="w-8 h-8" />
+          Fertig <CheckCircle2 className="w-7 h-7" />
         </button>
       </div>
     </div>
   );
 
   const renderSummary = () => (
-    <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-      <div className="flex-none p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 z-10 flex justify-between items-center">
-        <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800 dark:text-white">
+    <div className="app-container bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+      {/* Header */}
+      <div className="app-header p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 flex justify-between items-center safe-area-top">
+        <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
           <CheckCircle2 className="text-brand-600 dark:text-brand-400" /> Zusammenfassung
         </h2>
         <ThemeToggle />
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 no-scrollbar pb-32">
+      {/* Content */}
+      <div className="app-content p-4 no-scrollbar">
         <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl overflow-hidden max-w-2xl mx-auto mb-8 border dark:border-slate-800">
           <div className="bg-slate-800 dark:bg-slate-950 text-white p-6 border-b border-slate-700">
             <div className="flex justify-between items-center mb-2">
@@ -843,21 +855,22 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex flex-col gap-4 z-50 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
-        <div className="flex gap-4">
+      {/* Footer Buttons */}
+      <div className="app-footer p-4 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex flex-col gap-3 safe-area-bottom">
+        <div className="flex gap-3">
           <button
             type="button"
             onClick={() => setCurrentStep(AppStep.DRIVER_SIGNATURE)}
-            className="flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-6 px-6 rounded-2xl transition-colors text-xl"
+            className="touch-button flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-4 px-4 rounded-2xl transition-colors text-responsive"
           >
             Bearbeiten
           </button>
           <button
             type="button"
             onClick={submitReport}
-            className="flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-6 px-6 rounded-2xl flex justify-center items-center gap-3 shadow-xl transition-colors text-xl"
+            className="touch-button flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-4 px-4 rounded-2xl flex justify-center items-center gap-2 shadow-xl transition-colors text-responsive"
           >
-            <Save className="w-8 h-8" />
+            <Save className="w-6 h-6" />
             Speichern
           </button>
         </div>
@@ -871,9 +884,9 @@ const App: React.FC = () => {
               alert('Fehler beim PDF-Export: ' + (error instanceof Error ? error.message : 'Unbekannter Fehler'));
             }
           }}
-          className="w-full bg-green-600 active:bg-green-700 text-white font-bold py-6 px-6 rounded-2xl flex justify-center items-center gap-3 shadow-xl transition-colors text-xl"
+          className="touch-button w-full bg-green-600 active:bg-green-700 text-white font-bold py-4 px-4 rounded-2xl flex justify-center items-center gap-2 shadow-xl transition-colors text-responsive"
         >
-          <Download className="w-8 h-8" />
+          <Download className="w-6 h-6" />
           Als PDF herunterladen
         </button>
       </div>
@@ -881,15 +894,17 @@ const App: React.FC = () => {
   );
 
   const renderViewReport = () => (
-    <div className="flex flex-col h-full bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
-      <div className="flex-none p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 z-10 flex justify-between items-center">
-        <h2 className="text-xl font-bold flex items-center gap-2 text-slate-800 dark:text-white">
+    <div className="app-container bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
+      {/* Header */}
+      <div className="app-header p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 flex justify-between items-center safe-area-top">
+        <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
           <Eye className="text-brand-600 dark:text-brand-400" /> Bericht ansehen
         </h2>
         <ThemeToggle />
       </div>
 
-      <div className="flex-1 overflow-y-auto p-4 no-scrollbar pb-32">
+      {/* Content */}
+      <div className="app-content p-4 no-scrollbar">
         <div className="bg-white dark:bg-slate-900 rounded-2xl shadow-xl overflow-hidden max-w-2xl mx-auto mb-8 border dark:border-slate-800">
           <div className="bg-slate-800 dark:bg-slate-950 text-white p-6 border-b border-slate-700">
             <div className="flex justify-between items-center mb-2">
@@ -1029,23 +1044,24 @@ const App: React.FC = () => {
         </div>
       </div>
 
-      <div className="fixed bottom-0 left-0 right-0 p-6 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex flex-col gap-4 z-50 safe-area-bottom shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
-        <div className="flex gap-4">
+      {/* Footer Buttons */}
+      <div className="app-footer p-4 bg-white dark:bg-slate-900 border-t dark:border-slate-800 flex flex-col gap-3 safe-area-bottom">
+        <div className="flex gap-3">
           <button
             type="button"
             onClick={() => setCurrentStep(AppStep.DASHBOARD)}
-            className="flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-6 px-6 text-xl rounded-2xl transition-colors flex items-center justify-center gap-3"
+            className="touch-button flex-1 bg-slate-100 dark:bg-slate-800 active:bg-slate-200 dark:active:bg-slate-700 text-slate-700 dark:text-slate-200 font-bold py-4 px-4 rounded-2xl transition-colors flex items-center justify-center gap-2 text-responsive"
           >
-            <ChevronLeft className="w-9 h-9" />
+            <ChevronLeft className="w-7 h-7" />
             Zurück
           </button>
           {report.status === 'draft' && (
             <button
               type="button"
               onClick={() => editReport(report.id)}
-              className="flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-6 px-6 text-xl rounded-2xl flex justify-center items-center gap-3 shadow-xl transition-colors"
+              className="touch-button flex-[2] bg-brand-600 active:bg-brand-700 text-white font-bold py-4 px-4 rounded-2xl flex justify-center items-center gap-2 shadow-xl transition-colors text-responsive"
             >
-              <Edit className="w-8 h-8" />
+              <Edit className="w-6 h-6" />
               Weiter bearbeiten
             </button>
           )}
@@ -1060,9 +1076,9 @@ const App: React.FC = () => {
               alert('Fehler beim PDF-Export: ' + (error instanceof Error ? error.message : 'Unbekannter Fehler'));
             }
           }}
-          className="w-full bg-green-600 active:bg-green-700 text-white font-bold py-6 px-6 rounded-2xl flex justify-center items-center gap-3 shadow-xl transition-colors text-xl"
+          className="touch-button w-full bg-green-600 active:bg-green-700 text-white font-bold py-4 px-4 rounded-2xl flex justify-center items-center gap-2 shadow-xl transition-colors text-responsive"
         >
-          <Download className="w-8 h-8" />
+          <Download className="w-6 h-6" />
           Als PDF herunterladen
         </button>
       </div>
