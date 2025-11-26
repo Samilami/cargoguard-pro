@@ -53,6 +53,7 @@ const DAMAGE_TYPES = [
 const App: React.FC = () => {
   const [currentStep, setCurrentStep] = useState<AppStep>(AppStep.DASHBOARD);
   const [report, setReport] = useState<InspectionReport>(INITIAL_REPORT);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Datenbank Hook
   const { reports, loading, error, saveReport, deleteReport, getReport, getReportsByStatus } = useDatabase();
@@ -96,7 +97,7 @@ const App: React.FC = () => {
 
   // Helper component for Theme Toggle
   const ThemeToggle = () => (
-    <button 
+    <button
       onClick={() => setIsDarkMode(!isDarkMode)}
       className="p-2 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-yellow-400 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors border border-transparent dark:border-slate-700"
       aria-label="Design wechseln"
@@ -105,6 +106,152 @@ const App: React.FC = () => {
       {isDarkMode ? <Sun className="w-5 h-5" /> : <Moon className="w-5 h-5" />}
     </button>
   );
+
+  // Progress Stepper Component
+  const ProgressStepper = () => {
+    const steps = [
+      { id: AppStep.SCAN_DOCUMENT, label: 'Lieferschein', icon: FileText, number: 1 },
+      { id: AppStep.DAMAGE_LOG, label: 'Schäden', icon: AlertTriangle, number: 2 },
+      { id: AppStep.DRIVER_SIGNATURE, label: 'Unterschrift', icon: PenTool, number: 3 },
+      { id: AppStep.SUMMARY, label: 'Fertig', icon: CheckCircle2, number: 4 }
+    ];
+
+    const currentStepIndex = steps.findIndex(s => s.id === currentStep);
+
+    return (
+      <div className="flex items-center justify-between px-4 py-3 bg-white dark:bg-slate-900 border-b dark:border-slate-800">
+        {steps.map((step, index) => {
+          const isActive = currentStep === step.id;
+          const isCompleted = currentStepIndex > index;
+          const StepIcon = step.icon;
+
+          return (
+            <React.Fragment key={step.id}>
+              <div className="flex flex-col items-center flex-1">
+                <div className={`w-10 h-10 rounded-full flex items-center justify-center transition-all ${
+                  isActive
+                    ? 'bg-brand-600 text-white scale-110 shadow-lg'
+                    : isCompleted
+                    ? 'bg-green-500 text-white'
+                    : 'bg-slate-200 dark:bg-slate-700 text-slate-500 dark:text-slate-400'
+                }`}>
+                  {isCompleted ? (
+                    <CheckCircle2 className="w-5 h-5" />
+                  ) : (
+                    <StepIcon className="w-5 h-5" />
+                  )}
+                </div>
+                <span className={`text-xs mt-1 font-medium ${
+                  isActive
+                    ? 'text-brand-600 dark:text-brand-400'
+                    : isCompleted
+                    ? 'text-green-600 dark:text-green-400'
+                    : 'text-slate-400 dark:text-slate-500'
+                }`}>
+                  {step.label}
+                </span>
+              </div>
+              {index < steps.length - 1 && (
+                <div className={`h-0.5 flex-1 mx-2 transition-all ${
+                  isCompleted ? 'bg-green-500' : 'bg-slate-200 dark:bg-slate-700'
+                }`} />
+              )}
+            </React.Fragment>
+          );
+        })}
+      </div>
+    );
+  };
+
+  // Navigation Drawer Component
+  const NavigationDrawer = () => {
+    if (!isMenuOpen) return null;
+
+    const menuItems = [
+      {
+        icon: Home,
+        label: 'Dashboard',
+        onClick: () => {
+          setCurrentStep(AppStep.DASHBOARD);
+          setIsMenuOpen(false);
+        }
+      },
+      {
+        icon: Plus,
+        label: 'Neuer Bericht',
+        onClick: () => {
+          startNewReport();
+          setIsMenuOpen(false);
+        }
+      },
+      {
+        icon: FileText,
+        label: `Berichte (${reports.length})`,
+        onClick: () => {
+          setCurrentStep(AppStep.DASHBOARD);
+          setIsMenuOpen(false);
+        }
+      }
+    ];
+
+    return (
+      <>
+        {/* Overlay */}
+        <div
+          className="fixed inset-0 bg-black/50 z-[60] transition-opacity"
+          onClick={() => setIsMenuOpen(false)}
+        />
+
+        {/* Drawer */}
+        <div className="fixed top-0 left-0 h-full w-72 bg-white dark:bg-slate-900 z-[70] shadow-2xl transform transition-transform safe-area-left">
+          {/* Header */}
+          <div className="p-6 bg-brand-600 dark:bg-brand-700 text-white safe-area-top">
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-xl font-bold">CargoGuard Pro</h2>
+              <button
+                type="button"
+                onClick={() => setIsMenuOpen(false)}
+                className="p-2 hover:bg-white/20 rounded-lg transition-colors"
+                aria-label="Menü schließen"
+                title="Menü schließen"
+              >
+                <X className="w-6 h-6" />
+              </button>
+            </div>
+            <p className="text-brand-100 text-sm">Navigation</p>
+          </div>
+
+          {/* Menu Items */}
+          <nav className="p-4 space-y-2">
+            {menuItems.map((item, index) => {
+              const ItemIcon = item.icon;
+              return (
+                <button
+                  type="button"
+                  key={index}
+                  onClick={item.onClick}
+                  className="w-full flex items-center gap-4 p-4 rounded-xl hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors text-left group"
+                >
+                  <ItemIcon className="w-6 h-6 text-slate-600 dark:text-slate-400 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors" />
+                  <span className="font-medium text-slate-800 dark:text-slate-200 group-hover:text-brand-600 dark:group-hover:text-brand-400 transition-colors">
+                    {item.label}
+                  </span>
+                </button>
+              );
+            })}
+          </nav>
+
+          {/* Footer */}
+          <div className="absolute bottom-0 left-0 right-0 p-4 border-t dark:border-slate-800 safe-area-bottom">
+            <div className="flex items-center justify-between">
+              <span className="text-sm text-slate-500 dark:text-slate-400">Design</span>
+              <ThemeToggle />
+            </div>
+          </div>
+        </div>
+      </>
+    );
+  };
 
   // --- Actions ---
 
@@ -358,11 +505,25 @@ const App: React.FC = () => {
   const renderScanDocument = () => (
     <div className="app-container bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       {/* Header */}
-      <div className="app-header p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 flex justify-between items-center safe-area-top">
-        <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
-          <FileText className="text-brand-600 dark:text-brand-400" /> 1. Lieferschein
-        </h2>
-        <ThemeToggle />
+      <div className="app-header bg-white dark:bg-slate-900 shadow-sm safe-area-top">
+        <div className="p-4 border-b dark:border-slate-800 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              className="touch-button p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              aria-label="Menü öffnen"
+              title="Menü öffnen"
+            >
+              <Menu className="w-6 h-6 text-slate-700 dark:text-slate-300" />
+            </button>
+            <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
+              <FileText className="text-brand-600 dark:text-brand-400" /> 1. Lieferschein
+            </h2>
+          </div>
+          <ThemeToggle />
+        </div>
+        <ProgressStepper />
       </div>
 
       {/* Content */}
@@ -470,11 +631,25 @@ const App: React.FC = () => {
   const renderDamageLog = () => (
     <div className="app-container bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       {/* Header */}
-      <div className="app-header p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 flex justify-between items-center safe-area-top">
-        <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
-          <AlertTriangle className="text-orange-500" /> 2. Schäden
-        </h2>
-        <ThemeToggle />
+      <div className="app-header bg-white dark:bg-slate-900 shadow-sm safe-area-top">
+        <div className="p-4 border-b dark:border-slate-800 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              className="touch-button p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              aria-label="Menü öffnen"
+              title="Menü öffnen"
+            >
+              <Menu className="w-6 h-6 text-slate-700 dark:text-slate-300" />
+            </button>
+            <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
+              <AlertTriangle className="text-orange-500" /> 2. Schäden
+            </h2>
+          </div>
+          <ThemeToggle />
+        </div>
+        <ProgressStepper />
       </div>
 
       {/* Content */}
@@ -606,11 +781,25 @@ const App: React.FC = () => {
   const renderSignature = () => (
     <div className="app-container bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       {/* Header */}
-      <div className="app-header p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 flex justify-between items-center safe-area-top">
-        <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
-          <PenTool className="text-brand-600 dark:text-brand-400" /> 3. Abschluss
-        </h2>
-        <ThemeToggle />
+      <div className="app-header bg-white dark:bg-slate-900 shadow-sm safe-area-top">
+        <div className="p-4 border-b dark:border-slate-800 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              className="touch-button p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              aria-label="Menü öffnen"
+              title="Menü öffnen"
+            >
+              <Menu className="w-6 h-6 text-slate-700 dark:text-slate-300" />
+            </button>
+            <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
+              <PenTool className="text-brand-600 dark:text-brand-400" /> 3. Abschluss
+            </h2>
+          </div>
+          <ThemeToggle />
+        </div>
+        <ProgressStepper />
       </div>
 
       {/* Content */}
@@ -734,11 +923,25 @@ const App: React.FC = () => {
   const renderSummary = () => (
     <div className="app-container bg-slate-50 dark:bg-slate-950 transition-colors duration-300">
       {/* Header */}
-      <div className="app-header p-4 bg-white dark:bg-slate-900 shadow-sm border-b dark:border-slate-800 flex justify-between items-center safe-area-top">
-        <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
-          <CheckCircle2 className="text-brand-600 dark:text-brand-400" /> Zusammenfassung
-        </h2>
-        <ThemeToggle />
+      <div className="app-header bg-white dark:bg-slate-900 shadow-sm safe-area-top">
+        <div className="p-4 border-b dark:border-slate-800 flex justify-between items-center">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              className="touch-button p-2 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition-colors"
+              aria-label="Menü öffnen"
+              title="Menü öffnen"
+            >
+              <Menu className="w-6 h-6 text-slate-700 dark:text-slate-300" />
+            </button>
+            <h2 className="text-responsive-lg font-bold flex items-center gap-2 text-slate-800 dark:text-white">
+              <CheckCircle2 className="text-brand-600 dark:text-brand-400" /> Zusammenfassung
+            </h2>
+          </div>
+          <ThemeToggle />
+        </div>
+        <ProgressStepper />
       </div>
 
       {/* Content */}
@@ -1123,6 +1326,7 @@ const App: React.FC = () => {
 
   return (
     <div className="h-full w-full bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100">
+      <NavigationDrawer />
       {currentStep === AppStep.DASHBOARD && renderDashboard()}
       {currentStep === AppStep.VIEW_REPORT && renderViewReport()}
       {currentStep === AppStep.SCAN_DOCUMENT && renderScanDocument()}
