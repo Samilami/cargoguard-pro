@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { AppStep, DamageRecord, DriverData, InspectionReport } from './types';
 import CameraInput from './components/CameraInput';
 import SignaturePad from './components/SignaturePad';
-import { useDatabase } from './hooks/useDatabase';
+import { useSupabase } from './hooks/useSupabase';
 import { generateReportPDF } from './services/pdfService';
 import {
   Truck,
@@ -55,8 +55,8 @@ const App: React.FC = () => {
   const [report, setReport] = useState<InspectionReport>(INITIAL_REPORT);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  // Datenbank Hook
-  const { reports, loading, error, saveReport, deleteReport, getReport, getReportsByStatus } = useDatabase();
+  // Datenbank Hook (Supabase)
+  const { reports, loading, error, saveReport, deleteReport, getReport, getReportsByStatus } = useSupabase();
 
   // Theme State
   const [isDarkMode, setIsDarkMode] = useState(() => {
@@ -804,24 +804,6 @@ const App: React.FC = () => {
 
       {/* Content */}
       <div className="app-content p-4 no-scrollbar">
-        
-        {/* Vorbehalt Section */}
-        <div className="bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-900/50 p-5 rounded-xl shadow-sm mb-6">
-          <label className="flex items-center gap-4 cursor-pointer">
-             <div className="relative flex items-center">
-               <input 
-                 type="checkbox" 
-                 checked={report.driver?.underReserve || false}
-                 onChange={(e) => setReport(prev => ({...prev, driver: {...(prev.driver || {} as any), underReserve: e.target.checked}}))}
-                 className="w-7 h-7 text-brand-600 rounded-lg focus:ring-brand-500 border-gray-300"
-               />
-             </div>
-             <div className="flex-1">
-                <div className="font-bold text-slate-800 dark:text-yellow-100 text-lg">Annahme unter Vorbehalt</div>
-                <div className="text-slate-500 dark:text-yellow-200/70 text-xs leading-tight mt-0.5">Pauschaler Vermerk ohne Angabe von Gründen</div>
-             </div>
-          </label>
-        </div>
 
         {/* Mitarbeiter WE Section */}
         <div className="bg-white dark:bg-slate-900 p-5 rounded-xl shadow-sm border border-slate-200 dark:border-slate-800 space-y-5 mb-6">
@@ -894,8 +876,13 @@ const App: React.FC = () => {
           <p className="text-xs text-slate-400 mt-2 text-right">Bitte im Feld unterschreiben</p>
         </div>
 
-        <div className="mt-6 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/50 p-4 rounded-xl text-sm text-blue-900 dark:text-blue-200 leading-relaxed">
-          <strong>Bestätigung:</strong> Ich bestätige hiermit die Richtigkeit der Angaben. Die Ladungssicherung und der Zustand wurden überprüft.
+        <div className="mt-6 p-4 border border-slate-300 dark:border-slate-700 rounded-lg bg-slate-50 dark:bg-slate-800/50">
+          <p className="text-sm text-slate-700 dark:text-slate-300"><strong>Bestätigung:</strong> Ich bestätige hiermit die Richtigkeit der Angaben. Die Ladungssicherung und der Zustand wurden überprüft.</p>
+        </div>
+
+        {/* Vorbehalt Notice */}
+        <div className="mt-4 p-4 border-t border-b border-slate-300 dark:border-slate-700">
+          <p className="font-bold text-slate-800 dark:text-slate-200">Vermerk: Annahme unter Vorbehalt</p>
         </div>
       </div>
 

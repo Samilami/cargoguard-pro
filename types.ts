@@ -31,7 +31,6 @@ export interface DriverData {
   licensePlate: string;
   signatureDataUrl: string;
   company: string;
-  underReserve: boolean;
 }
 
 export interface InspectionReport {
